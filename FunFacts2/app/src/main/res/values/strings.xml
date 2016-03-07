@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Fun Facts2</string>
+    <string name="title">Fun Facts!</string>
+    <string name="funFactsTextView">Ants stretch when they wake up in the morning.</string>
+    <string name="funFactsButton">Show another fun facts.</string>
+</resources>
