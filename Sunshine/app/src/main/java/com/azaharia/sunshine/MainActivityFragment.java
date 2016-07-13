@@ -13,8 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +56,7 @@ public class MainActivityFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh){
             FetchWeatherTask fetch = new FetchWeatherTask();
-            fetch.execute("94043");
+            fetch.execute("Bucharest");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -80,6 +83,12 @@ public class MainActivityFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String forecast = mForecastAdapter.getItem(position);
+                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+        }});
 
         return rootView;
     }
@@ -105,7 +114,7 @@ public class MainActivityFragment extends Fragment {
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
 
-            String highLowStr = roundedHigh + "/" + roundedLow;
+            String highLowStr = roundedLow + "/" + roundedHigh;
             return highLowStr;
         }
 
@@ -198,7 +207,7 @@ public class MainActivityFragment extends Fragment {
             String forecastJsonStr = null;
             String format = "json";
             String units= "metric";
-            int numDays = 7;
+            int numDays = 16;
             String key = "aeefe119edb695e78e33dd7eb70ef6d2";
 
             try {
@@ -221,7 +230,6 @@ public class MainActivityFragment extends Fragment {
                                 .build();
 
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "Built URI "+ builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -250,8 +258,6 @@ public class MainActivityFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
-
-                Log.v(LOG_TAG, "Forecast JSON string" + forecastJsonStr);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -270,7 +276,7 @@ public class MainActivityFragment extends Fragment {
                 }
             }
             try{
-                getWeatherDataFromJson(forecastJsonStr, numDays);
+                return getWeatherDataFromJson(forecastJsonStr, numDays);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e(LOG_TAG, e.getMessage(), e);
@@ -286,9 +292,6 @@ public class MainActivityFragment extends Fragment {
                 for (String dayForecastStr : result){
                     mForecastAdapter.add(dayForecastStr);
                 }
-            }
-            else{
-                Log.v(LOG_TAG,"WTFWTFTWFTWFTF");
             }
         }
     }
