@@ -8,10 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.azaharia.learningfragments.MainActivity"
-    android:background="#FFB000">
-
-    <include layout="@layout/content_main" />
+    tools:context="com.azaharia.fragmentswithjava.MainActivity"
+    android:background="#33BBF0">
 
 
 </RelativeLayout>
