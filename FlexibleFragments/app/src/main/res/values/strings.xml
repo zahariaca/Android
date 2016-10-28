@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">FlexibleFragments</string>
+    
+    <string-array name="titles">
+        <item>Activities</item>
+        <item>Services</item>
+        <item>Content Providers</item>
+        <item>Intents and Intent filters</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pharetra ante vitae arcu convallis, vitae gravida ligula tristique. Donec non mattis nibh. Phasellus vel bibendum nunc.</item>
+        <item>Duis sagittis, ligula nec egestas ultricies, erat elit dapibus neque, sit amet posuere justo velit vel lacus.</item>
+        <item>Nullam vulputate convallis tellus in suscipit. Quisque lobortis pellentesque varius.</item>
+        <item>Mauris velit felis, vulputate at suscipit non, efficitur ac libero. Praesent imperdiet velit vitae auctor maximus.</item>
+    </string-array>
+</resources>
