@@ -8,9 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.azaharia.fragmenttransactions.MainActivity"
-    android:background="#ffee00">
-
-
+    tools:context="com.azaharia.myapplication.MainActivity"
+    android:background="#4CAF50">
 
 </RelativeLayout>
