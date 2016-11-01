@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -77,9 +78,14 @@ public class MainActivityFragment extends Fragment {
                 "Sun - Sunny - 80/68"
         };
 
+
         List<String> weekForcast = new ArrayList<String>(Arrays.asList(forecastArray));
 
-        mForecastAdapter=new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForcast);
+        mForecastAdapter=new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_textview,
+                weekForcast);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
