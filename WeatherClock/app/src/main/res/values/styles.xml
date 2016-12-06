@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:dialogTheme">@style/DialogTheme</item>
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -11,5 +12,8 @@
     <style name="AppTheme.OverFlow">
         <item name="android:src">@drawable/ic_action_overflow</item>
 
+    </style>
+    <style name="DialogTheme" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 </resources>
