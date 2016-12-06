@@ -11,4 +11,14 @@
         layout="@layout/toolbar" />
 
     <include layout="@layout/activity_main_rv" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editText" />
 </RelativeLayout>

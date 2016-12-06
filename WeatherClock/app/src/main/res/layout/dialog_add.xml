@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    style="@style/AppTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_name"
-        android:text="Add a name"
-        android:padding="16dp"/>
+        android:padding="5dp"
+        android:text="Add a name" />
+
     <ImageButton
+        android:id="@+id/ib_exit"
         android:layout_width="12dp"
         android:layout_height="12dp"
-        android:id="@+id/ib_exit"
-        app:srcCompat="@drawable/ic_action_cancel"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/tv_name"
+        android:layout_marginTop="5dp"
         android:background="@null"
-        android:layout_marginTop="16dp"/>
+        app:srcCompat="@drawable/ic_action_cancel" />
+
     <EditText
         android:id="@+id/et_name"
         android:layout_width="match_parent"
@@ -24,18 +29,22 @@
         android:layout_below="@+id/tv_name"
         android:hint="Your alarm name"
         android:padding="10dp" />
+
     <TimePicker
+        android:id="@+id/timePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/et_name"
-        android:layout_alignParentStart="true" />
+        android:headerBackground="@color/colorAccent"
+        android:numbersSelectorColor="@color/colorAccent" />
+
     <Button
         android:id="@+id/btn_commit"
-        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timePicker"
         android:layout_centerInParent="true"
-        android:text="Commit"/>
+        android:text="Commit"
+        android:textAllCaps="false" />
 </RelativeLayout>
