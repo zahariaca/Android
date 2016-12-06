@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="119dp"
-        app:srcCompat="@android:drawable/ic_menu_recent_history"
+        app:srcCompat="@drawable/ic_alarm_on"
         android:id="@+id/imageView"
         android:layout_gravity="center_vertical"/>
 </LinearLayout>
