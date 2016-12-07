@@ -3,13 +3,9 @@ package com.samt.weatherclock;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by AZaharia on 12/5/2016.
- */
-
 public class Person {
-    String name;
-    String age;
+    public String name;
+    public String age;
     int photoId;
 
     Person(String name, String age) {
