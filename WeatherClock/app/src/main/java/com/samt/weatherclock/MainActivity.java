@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.samt.weatherclock.adapters.AlarmAdapter;
 import com.samt.weatherclock.adapters.ViewPagerAdapter;
 import com.samt.weatherclock.fragments.AlarmFragment;
+import com.samt.weatherclock.fragments.DialogAdd;
 import com.samt.weatherclock.fragments.WeatherFragment;
 
 import java.util.ArrayList;

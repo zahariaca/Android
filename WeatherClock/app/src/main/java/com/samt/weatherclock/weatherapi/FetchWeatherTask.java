@@ -30,7 +30,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     /* The date/time conversion code is going to be moved outside the asynctask later,
 * so for convenience we're breaking it out into its own method now.
 */
-    private String getReadableDateString(long time){
+    private String getReadableDateString(long time) {
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
@@ -52,7 +52,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
-     *
+     * <p>
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
@@ -88,7 +88,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         dayTime = new Time();
 
         String[] resultStrs = new String[numDays];
-        for(int i = 0; i < weatherArray.length(); i++) {
+        for (int i = 0; i < weatherArray.length(); i++) {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
@@ -102,7 +102,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // "this saturday".
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
-            dateTime = dayTime.setJulianDay(julianStartDay+i);
+            dateTime = dayTime.setJulianDay(julianStartDay + i);
             day = getReadableDateString(dateTime);
 
             // description is in a child array called "weather", which is 1 element long.
@@ -133,7 +133,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
         String format = "json";
-        String units= "metric";
+        String units = "metric";
         int numDays = 16;
         String key = "aeefe119edb695e78e33dd7eb70ef6d2";
 
@@ -141,12 +141,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
-            final String FORECAST_BASE_URL="http://api.openweathermap.org/data/2.5/forecast/daily?";
-            final String QUERY_PARAM="q";
-            final String FORMAT_PARAM="mode";
-            final String UNITS_PARAM="units";
-            final String DAYS_PARAM="cnt";
-            final String KEY_PARAM="APPID";
+            final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+            final String QUERY_PARAM = "q";
+            final String FORMAT_PARAM = "mode";
+            final String UNITS_PARAM = "units";
+            final String DAYS_PARAM = "cnt";
+            final String KEY_PARAM = "APPID";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, params[0])
@@ -190,7 +190,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
             return null;
-        } finally{
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -202,7 +202,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                 }
             }
         }
-        try{
+        try {
             return getWeatherDataFromJson(forecastJsonStr, numDays);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -214,10 +214,10 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
     @Override
     protected void onPostExecute(String[] result) {
-        if(result != null){
-  //          persons.clear();
-            for (String dayForecastStr : result){
-  //              persons.add(new Person(dayForecastStr, "testing"));
+        if (result != null) {
+            //          persons.clear();
+            for (String dayForecastStr : result) {
+                //              persons.add(new Person(dayForecastStr, "testing"));
             }
             //alarmAdapter = new AlarmAdapter(persons);
         }

@@ -1,37 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#EEEEEE"
     android:orientation="vertical"
-    android:background="#EEEEEE">
+    android:paddingTop="56dp">
+
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:layout_below="@+id/tv_temperature"/>
 
     <TextView
         android:id="@+id/tv_location_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="Bucharest, RO"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/tv_location_lastupdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_city"
+        android:layout_centerHorizontal="true"
+        android:text="Last update:  Dec 08, 2014 13:45:58 AM"
+        android:textSize="15sp" />
+
+
+    <TextView
+        android:id="@+id/weather_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_lastupdated"
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
-        android:textSize="25dp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="90sp" />
 
-
-    <ImageView
-        android:layout_below="@+id/tv_location_city"
-        android:id="@+id/iv_weather_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <TextView
+        android:id="@+id/tv_weatherType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/weather_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25sp"/>
+        android:text="Sunny"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_weatherType"
+        android:layout_centerHorizontal="true"
+        android:text="Humidity: 59%"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_humidity"
+        android:layout_centerHorizontal="true"
+        android:text="Pressure: 977 hPa"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="16.58 °C"
+        android:layout_below="@+id/tv_pressure"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:text="16.58 °C"
         android:textSize="50sp" />
-    
+
 
 </RelativeLayout>
