@@ -8,7 +8,7 @@ public class Person {
     public String age;
     int photoId;
 
-    Person(String name, String age) {
+    public Person(String name, String age) {
         this.name = name;
         this.age = age;
     }
