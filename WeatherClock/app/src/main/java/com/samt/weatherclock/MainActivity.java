@@ -19,13 +19,18 @@ import com.samt.weatherclock.fragments.WeatherFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private List<Person> persons;
     private AlarmAdapter alarmAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    Toolbar toolbar;
+    private Toolbar toolbar;
+    private Realm realm;
+    private RealmConfiguration realmConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
+        Realm.setDefaultConfiguration(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);
 
         /*initializeData();
 

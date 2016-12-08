@@ -24,14 +24,15 @@ import io.realm.RealmResults;
  */
 
 public class WeatherFragment extends Fragment {
-    Typeface weatherFont;
-    TextView weatherIcon;
-    TextView location;
+    private Typeface weatherFont;
+    private TextView weatherIcon;
+    private TextView location;
     private Button btn;
-    Realm realm;
-    private WeatherDataMock data = new WeatherDataMock(1, "Bucharest, RO", "Last update:  Dec 08, 2014 13:45:58 AM",
+    private Realm realm;
+    private RealmConfiguration realmConfiguration;
+/*    private WeatherDataMock data = new WeatherDataMock(1, "Bucharest, RO", "Last update:  Dec 08, 2014 13:45:58 AM",
                                                         "&#xf014;", "Sunny",
-                                                        "Humidity: 59%", "Pressure: 977 hPa", "-1 °C");
+                                                        "Humidity: 59%", "Pressure: 977 hPa", "-1 °C");*/
 
     public WeatherFragment() {
     }
@@ -40,6 +41,7 @@ public class WeatherFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons-regular-webfont.ttf");
+
     }
 
     @Nullable
@@ -47,19 +49,26 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
 
+
+
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
         weatherIcon.setText(getActivity().getString(R.string.weather_sunny));
 
-        try {
-            Realm.init(getActivity());
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
-            Realm.setDefaultConfiguration(realmConfiguration);
+        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
+        Realm.setDefaultConfiguration(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);
 
-            realm = Realm.getDefaultInstance();
- /*           realm.beginTransaction();
+        try {
+
+
+
+
+
+/*            realm.beginTransaction();
             realm.copyToRealm(data);
-            realm.commitTransaction();*/
+            realm.commitTransaction();
+            realm.close();*/
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -71,18 +80,29 @@ public class WeatherFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("REALMQUERY", "Starting querry");
                 RealmResults<WeatherDataMock> query = realm.where(WeatherDataMock.class)
                         .findAll();
                 for(WeatherDataMock c: query) {
                     realm.beginTransaction();
-                    c.setLocation("Moscow");
+                    c.setLocation("Moscow, RU");
                     realm.commitTransaction();
                     location.setText(c.getLocation());
                     Log.d("REALMQUERY", c.getLocation() + " " + c.getHumidity());
+
                 }
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        if(!realm.isClosed()) {
+            realm.close();
+        }
+        super.onDestroy();
+
     }
 }

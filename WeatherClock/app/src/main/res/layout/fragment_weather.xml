@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="#EEEEEE"
     android:orientation="vertical"
-    android:paddingTop="56dp">
+    android:paddingTop="56dp"
+    android:id="@+id/weather_fragment">
 
     <Button
         android:id="@+id/btn_test"

@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.samt.weatherclock.Person;
 import com.samt.weatherclock.R;
+import com.samt.weatherclock.WeatherDataMock;
 import com.samt.weatherclock.adapters.AlarmAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by AZaharia on 12/7/2016.
@@ -25,6 +31,11 @@ public class AlarmFragment extends Fragment {
     private LinearLayoutManager llm;
     private AlarmAdapter alarmAdapter;
     private List<Person> persons;
+    private Realm realm;
+    private RealmConfiguration realmConfiguration;
+
+
+
     public AlarmFragment() {
     }
 
@@ -43,6 +54,22 @@ public class AlarmFragment extends Fragment {
         initializeData();
         alarmAdapter = new AlarmAdapter(persons);
         recyclerView.setAdapter(alarmAdapter);
+
+        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
+        Realm.setDefaultConfiguration(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);
+
+        Log.d("REALMQUERY", "Starting querry");
+        RealmResults<WeatherDataMock> query = realm.where(WeatherDataMock.class)
+                .findAll();
+        for(WeatherDataMock c: query) {
+            realm.beginTransaction();
+            c.setLocation("Moscow, RU");
+            realm.commitTransaction();
+            ///location.setText(c.getLocation());
+            Log.d("REALMQUERY", c.getLocation() + " " + c.getHumidity());
+
+        }
 
 
         return rootView;
