@@ -16,6 +16,7 @@ import com.samt.weatherclock.R;
 import com.samt.weatherclock.WeatherDataMock;
 import com.samt.weatherclock.weatherapi.FetchWeatherTask;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -31,8 +32,16 @@ import io.realm.RealmResults;
 
 public class WeatherFragment extends Fragment {
     private Typeface weatherFont;
-    private TextView weatherIcon;
+
+
     private TextView location;
+    private TextView updated;
+    private TextView weatherIcon;
+    private TextView description;
+    private TextView temperature;
+    private TextView humidity;
+    private TextView pressure;
+
     private Button btn;
 
     public WeatherFragment(){}
@@ -52,10 +61,18 @@ public class WeatherFragment extends Fragment {
 
 
         location = (TextView) rootView.findViewById(R.id.tv_location_city);
-
+        updated = (TextView) rootView.findViewById(R.id.tv_location_lastupdated);
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
-        weatherIcon.setText(getActivity().getString(R.string.weather_sunny));
+        description = (TextView) rootView.findViewById(R.id.tv_weatherType);
+        temperature = (TextView) rootView.findViewById(R.id.tv_temperature);
+        humidity = (TextView) rootView.findViewById(R.id.tv_humidity);
+        pressure = (TextView) rootView.findViewById(R.id.tv_pressure);
+
+
+
+
+        //weatherIcon.setText(getActivity().getString(R.string.weather_sunny));
 
 /*
 
@@ -70,8 +87,14 @@ public class WeatherFragment extends Fragment {
         }.execute("Bucharest");
 */
 
-
         location.setText(getArguments().getString("CityName"));
+        updated.setText(getArguments().getString("Updated"));
+        setWeatherIcon(getArguments().getString("Id"),getArguments().getString("Sunrise"),getArguments().getString("Sunset"));
+        description.setText(getArguments().getString("Description"));
+        temperature.setText(getArguments().getString("Temperature"));
+        humidity.setText(getArguments().getString("Humidity"));
+        pressure.setText(getArguments().getString("Pressure"));
+
         btn = (Button) rootView.findViewById(R.id.btn_test);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +111,36 @@ public class WeatherFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void setWeatherIcon(String iconId, String sunriseString, String sunsetString){
+        int id = Integer.parseInt(iconId) /100;
+        long sunrise = Long.parseLong(sunriseString);
+        long sunset = Long.parseLong(sunsetString);
+
+        String icon = "";
+        if(id == 8){
+            long currentTime = new Date().getTime();
+            if(currentTime>=sunrise && currentTime<sunset) {
+                icon = getActivity().getString(R.string.weather_sunny);
+            } else {
+                icon = getActivity().getString(R.string.weather_clear_night);
+            }
+        } else {
+            switch(id) {
+                case 2 : icon = getActivity().getString(R.string.weather_thunder);
+                    break;
+                case 3 : icon = getActivity().getString(R.string.weather_drizzle);
+                    break;
+                case 7 : icon = getActivity().getString(R.string.weather_foggy);
+                    break;
+                case 6 : icon = getActivity().getString(R.string.weather_snowy);
+                    break;
+                case 5 : icon = getActivity().getString(R.string.weather_rainy);
+                    break;
+            }
+        }
+        weatherIcon.setText(icon);
+
     }
 }

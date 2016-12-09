@@ -1,6 +1,9 @@
 package com.samt.weatherclock;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +23,7 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
 
-        new Thread() {
+/*        new Thread() {
 
             @Override
             public void run() {
@@ -33,10 +36,21 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
 
                 }
             }
-        }.start();
+        }.start();*/
         Log.d(LOG_TAG, "Fetching weather data");
-        new FetchWeatherTask(this).execute("Bucharest");
+        if(!isNetworkAvailable()){
+            Log.d(LOG_TAG, "No network");
+        }else {
+            new FetchWeatherTask(this).execute("Bucharest");
+        }
     }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 
     private void completeSplash() {
         startApp();

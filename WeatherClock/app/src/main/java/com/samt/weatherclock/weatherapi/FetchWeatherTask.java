@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,9 +91,37 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         HashMap<String, String> hashMap = new HashMap<String, String>();
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONObject weather = forecastJson.getJSONArray("weather").getJSONObject(0);
+        JSONObject main = forecastJson.getJSONObject("main");
+        JSONObject sys = forecastJson.getJSONObject("sys");
         //JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
+        String country = sys.getString("country");
         String cityName = forecastJson.getString("name");
+        String description = weather.getString("description");
+        String id = weather.getString("id");
+        String sunrise = sys.getString("sunrise");
+        String sunset = sys.getString("sunrise");
+        String temperature = main.getString("temp");
+        String humidity = main.getString("humidity");
+        String pressure = main.getString("pressure");
+
+
+        DateFormat df = DateFormat.getDateTimeInstance();
+        String updatedOn = df.format(new Date(forecastJson.getLong("dt")*1000));
+
+        hashMap.put("CityName", cityName + ", " + country);
+        hashMap.put("Updated", "Last update: " + updatedOn);
+        hashMap.put("Id", id);
+        hashMap.put("Sunrise", sunrise);
+        hashMap.put("Sunset", sunset);
+        hashMap.put("Description", description.toUpperCase());
+        hashMap.put("Temperature", temperature + "°C");
+        hashMap.put("Humidity", "Humidity: " + humidity + "%");
+        hashMap.put("Pressure", "Pressure: " + pressure + "hPa");
+
+
+
 
 
 
@@ -144,7 +174,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
 
             highAndLow = formatHighLows(high, low);
             //resultStrs[i] = day + " - " + description + " - " + highAndLow;*/
-            hashMap.put("CityName", cityName);
+
 /*            hashMap.put("Day", day);
             hashMap.put("Description", description);
             hashMap.put("Temperature", highAndLow);*/

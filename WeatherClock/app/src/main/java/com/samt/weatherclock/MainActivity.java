@@ -44,10 +44,27 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Getting weather data from previous activity");
         Intent i = getIntent();
         Log.d("MAIN", i.getStringExtra("CityName"));
+        Log.d("MAIN", i.getStringExtra("Updated"));
+        Log.d("MAIN", i.getStringExtra("Id"));
+        Log.d("MAIN", i.getStringExtra("Sunrise"));
+        Log.d("MAIN", i.getStringExtra("Sunset"));
+        Log.d("MAIN", i.getStringExtra("Description"));
+        Log.d("MAIN", i.getStringExtra("Temperature"));
+        Log.d("MAIN", i.getStringExtra("Humidity"));
+        Log.d("MAIN", i.getStringExtra("Pressure"));
+
 
         Log.d(LOG_TAG, "Passing weather data to the WeatherFragment as Bundled arguments");
         Bundle args = new Bundle();
         args.putString("CityName", i.getStringExtra("CityName"));
+        args.putString("Updated", i.getStringExtra("Updated"));
+        args.putString("Id", i.getStringExtra("Id"));
+        args.putString("Sunrise", i.getStringExtra("Sunrise"));
+        args.putString("Sunset", i.getStringExtra("Sunset"));
+        args.putString("Description", i.getStringExtra("Description"));
+        args.putString("Temperature", i.getStringExtra("Temperature"));
+        args.putString("Humidity", i.getStringExtra("Humidity"));
+        args.putString("Pressure", i.getStringExtra("Pressure"));
         weatherFragment.setArguments(args);
 
 
