@@ -4,29 +4,19 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import com.samt.weatherclock.weatherapi.FetchWeatherTask;
 
-public class LoadingScreen extends AppCompatActivity {
-    private Realm realm;
-    private RealmConfiguration realmConfiguration;
-    private WeatherDataMock data = new WeatherDataMock(1, "Bucharest, RO", "Last update:  Dec 08, 2014 13:45:58 AM",
-            "&#xf014;", "Sunny",
-            "Humidity: 59%", "Pressure: 977 hPa", "-1 °C");
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask.LoadingTaskFinishedListener {
+    Map<String, String> weatherHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
-        Realm.init(this);
-        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealmFromLoadingScreen").build();
-        Realm.setDefaultConfiguration(realmConfiguration);
-        realm = Realm.getInstance(realmConfiguration);
-
-/*        realm.beginTransaction();
-        realm.copyToRealm(data);
-        realm.commitTransaction();*/
-        realm.close();
 
         new Thread() {
 
@@ -39,14 +29,29 @@ public class LoadingScreen extends AppCompatActivity {
 
                 } finally {
 
-
-
-                    Intent i = new Intent(LoadingScreen.this,
-                            MainActivity.class);
-                    startActivity(i);
-                    finish();
                 }
             }
         }.start();
+        new FetchWeatherTask(this).execute("Bucharest");
+    }
+
+    private void completeSplash() {
+        startApp();
+        finish(); // Don't forget to finish this Splash Activity so the user can't return to it!
+    }
+
+    private void startApp() {
+        Intent intent = new Intent(LoadingScreen.this, MainActivity.class);
+        for (Map.Entry<String, String> e : weatherHashMap.entrySet()) {
+            intent.putExtra(e.getKey(), e.getValue());
+        }
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onTaskFinished(HashMap<String, String> weatherHashMap) {
+        this.weatherHashMap = weatherHashMap;
+        completeSplash();
     }
 }

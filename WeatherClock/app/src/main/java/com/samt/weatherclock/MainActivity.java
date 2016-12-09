@@ -1,36 +1,27 @@
 package com.samt.weatherclock;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.samt.weatherclock.adapters.AlarmAdapter;
 import com.samt.weatherclock.adapters.ViewPagerAdapter;
 import com.samt.weatherclock.fragments.AlarmFragment;
 import com.samt.weatherclock.fragments.DialogAdd;
 import com.samt.weatherclock.fragments.WeatherFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private List<Person> persons;
-    private AlarmAdapter alarmAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
-    private Realm realm;
-    private RealmConfiguration realmConfiguration;
+    private WeatherFragment weatherFragment = new WeatherFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +38,17 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
+        Intent i = getIntent();
+        Log.d("MAIN", i.getStringExtra("Day"));
+
+        Bundle args = new Bundle();
+        args.putString("Day", i.getStringExtra("Day"));
+        weatherFragment.setArguments(args);
+
+
+/*        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
         Realm.setDefaultConfiguration(realmConfiguration);
-        realm = Realm.getInstance(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);*/
 
         /*initializeData();
 
@@ -71,20 +70,20 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AlarmFragment(), "ALARMS");
-        adapter.addFragment(new WeatherFragment(), "WEATHER");
+        adapter.addFragment(weatherFragment, "WEATHER");
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_add:
                 showDialogAdd();
                 Toast.makeText(this, "Add an alarm button toast for testing", Toast.LENGTH_SHORT).show();
@@ -104,24 +103,4 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getFragmentManager(), "Add");
     }
 
-    // This method creates an ArrayList that has three Person objects
-    private void initializeData(){
-        persons = new ArrayList<>();
-        persons.add(new Person("Emma Wilson", "23 years old"));
-        persons.add(new Person("Lavery Maiss", "25 years old"));
-        persons.add(new Person("Lillie Watts", "35 years old"));
-        persons.add(new Person("Emma Wilson", "23 years old"));
-        persons.add(new Person("Lavery Maiss", "25 years old"));
-        persons.add(new Person("Lillie Watts", "35 years old"));
-        persons.add(new Person("Emma Wilson", "23 years old"));
-        persons.add(new Person("Lavery Maiss", "25 years old"));
-        persons.add(new Person("Lillie Watts", "35 years old"));
-        persons.add(new Person("Emma Wilson", "23 years old"));
-        persons.add(new Person("Lavery Maiss", "25 years old"));
-        persons.add(new Person("Lillie Watts", "35 years old"));
-        persons.add(new Person("Emma Wilson", "23 years old"));
-        persons.add(new Person("Lavery Maiss", "25 years old"));
-        persons.add(new Person("Lillie Watts", "35 years old"));
-        persons.add(new Person("Emma Wilson", "23 years old"));
-    }
 }

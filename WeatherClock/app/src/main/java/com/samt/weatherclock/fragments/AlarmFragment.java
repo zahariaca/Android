@@ -55,9 +55,11 @@ public class AlarmFragment extends Fragment {
         alarmAdapter = new AlarmAdapter(persons);
         recyclerView.setAdapter(alarmAdapter);
 
+/*
         realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
         Realm.setDefaultConfiguration(realmConfiguration);
         realm = Realm.getInstance(realmConfiguration);
+
 
         Log.d("REALMQUERY", "Starting querry");
         RealmResults<WeatherDataMock> query = realm.where(WeatherDataMock.class)
@@ -70,7 +72,7 @@ public class AlarmFragment extends Fragment {
             Log.d("REALMQUERY", c.getLocation() + " " + c.getHumidity());
 
         }
-
+*/
 
         return rootView;
     }

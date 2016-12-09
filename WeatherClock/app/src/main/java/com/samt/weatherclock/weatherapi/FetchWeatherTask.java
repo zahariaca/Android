@@ -1,10 +1,13 @@
 package com.samt.weatherclock.weatherapi;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.samt.weatherclock.MainActivity;
 import com.samt.weatherclock.Person;
 
 import org.json.JSONArray;
@@ -18,14 +21,30 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by AZaharia on 12/8/2016.
  */
 
-public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,String>>{
+    public interface LoadingTaskFinishedListener {
+        void onTaskFinished(HashMap<String,String> weatherHashMap); // If you want to pass something back to the listener add a param to this method
+    }
+
     public final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+    private final LoadingTaskFinishedListener finishedListener ;
+
+    public FetchWeatherTask(){
+
+        finishedListener = null;
+    }
+
+    public FetchWeatherTask(LoadingTaskFinishedListener finishedListener){
+        this.finishedListener = finishedListener;
+    }
 
     /* The date/time conversion code is going to be moved outside the asynctask later,
 * so for convenience we're breaking it out into its own method now.
@@ -56,7 +75,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+    private HashMap<String, String> getWeatherDataFromJson(String forecastJsonStr, int numDays)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
@@ -69,6 +88,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
+
+        HashMap<String, String> hashMap = new HashMap<String, String>();
 
         // OWM returns daily forecasts based upon the local time of the city that is being
         // asked for, which means that we need to know the GMT offset to translate this data
@@ -87,7 +108,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // now we work exclusively in UTC
         dayTime = new Time();
 
-        String[] resultStrs = new String[numDays];
+        //String[] resultStrs = new String[numDays];
         for (int i = 0; i < weatherArray.length(); i++) {
             // For now, using the format "Day, description, hi/low"
             String day;
@@ -116,15 +137,19 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             double low = temperatureObject.getDouble(OWM_MIN);
 
             highAndLow = formatHighLows(high, low);
-            resultStrs[i] = day + " - " + description + " - " + highAndLow;
-        }
-        return resultStrs;
+            //resultStrs[i] = day + " - " + description + " - " + highAndLow;
+            hashMap.put("Day", day);
+            hashMap.put("Description", description);
+            hashMap.put("Temperature", highAndLow);
 
+
+        }
+        return hashMap;
     }
 
     @Override
-    protected String[] doInBackground(String... params) {
-
+    protected HashMap<String, String> doInBackground(String... params) {
+        Log.d("HashMapTest", "Starterd doInBackground");
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -203,23 +228,19 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             }
         }
         try {
+            Log.d("HashMapTest", "Returning a HashMap");
             return getWeatherDataFromJson(forecastJsonStr, numDays);
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(LOG_TAG, e.getMessage(), e);
         }
-
+        Log.d("HashMapTest", "Returning null");
         return null;
     }
 
     @Override
-    protected void onPostExecute(String[] result) {
-        if (result != null) {
-            //          persons.clear();
-            for (String dayForecastStr : result) {
-                //              persons.add(new Person(dayForecastStr, "testing"));
-            }
-            //alarmAdapter = new AlarmAdapter(persons);
-        }
+    protected void onPostExecute(HashMap<String, String> stringStringHashMap) {
+        super.onPostExecute(stringStringHashMap);
+        finishedListener.onTaskFinished(stringStringHashMap);
     }
 }

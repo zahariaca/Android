@@ -1,6 +1,7 @@
 package com.samt.weatherclock.fragments;
 
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,11 @@ import android.widget.TextView;
 
 import com.samt.weatherclock.R;
 import com.samt.weatherclock.WeatherDataMock;
+import com.samt.weatherclock.weatherapi.FetchWeatherTask;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -28,14 +34,9 @@ public class WeatherFragment extends Fragment {
     private TextView weatherIcon;
     private TextView location;
     private Button btn;
-    private Realm realm;
-    private RealmConfiguration realmConfiguration;
-/*    private WeatherDataMock data = new WeatherDataMock(1, "Bucharest, RO", "Last update:  Dec 08, 2014 13:45:58 AM",
-                                                        "&#xf014;", "Sunny",
-                                                        "Humidity: 59%", "Pressure: 977 hPa", "-1 °C");*/
 
-    public WeatherFragment() {
-    }
+    public WeatherFragment(){}
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,59 +51,42 @@ public class WeatherFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
 
 
+        location = (TextView) rootView.findViewById(R.id.tv_location_city);
 
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
         weatherIcon.setText(getActivity().getString(R.string.weather_sunny));
 
-        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
-        Realm.setDefaultConfiguration(realmConfiguration);
-        realm = Realm.getInstance(realmConfiguration);
+/*
 
-        try {
+        test = new FetchWeatherTask(){
+            @Override
+            protected void onPostExecute(HashMap<String, String> stringStringHashMap) {
+                Log.d("HashMapTest", stringStringHashMap.get("Day"));
+                testS = stringStringHashMap.get("Day");
+                super.onPostExecute(stringStringHashMap);
+
+            }
+        }.execute("Bucharest");
+*/
 
 
-
-
-
-/*            realm.beginTransaction();
-            realm.copyToRealm(data);
-            realm.commitTransaction();
-            realm.close();*/
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        location = (TextView) rootView.findViewById(R.id.tv_location_city);
-
+        location.setText(getArguments().getString("Day"));
         btn = (Button) rootView.findViewById(R.id.btn_test);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("REALMQUERY", "Starting querry");
-                RealmResults<WeatherDataMock> query = realm.where(WeatherDataMock.class)
-                        .findAll();
-                for(WeatherDataMock c: query) {
-                    realm.beginTransaction();
-                    c.setLocation("Moscow, RU");
-                    realm.commitTransaction();
-                    location.setText(c.getLocation());
-                    Log.d("REALMQUERY", c.getLocation() + " " + c.getHumidity());
+                Log.d("HashMapTest", "Starterd");
+                try {
+                    Log.d("HashMapTest", "fetchTask");
 
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onDestroy() {
-        if(!realm.isClosed()) {
-            realm.close();
-        }
-        super.onDestroy();
-
     }
 }
