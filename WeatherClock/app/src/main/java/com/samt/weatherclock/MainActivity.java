@@ -18,6 +18,7 @@ import com.samt.weatherclock.fragments.WeatherFragment;
 
 
 public class MainActivity extends AppCompatActivity {
+    public final String LOG_TAG = MainActivity.class.getSimpleName();
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
@@ -27,22 +28,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(LOG_TAG, "Creating toolbar");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Log.d(LOG_TAG, "Creating viewPager");
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
+        Log.d(LOG_TAG, "Creating tabs");
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        Log.d(LOG_TAG, "Getting weather data from previous activity");
         Intent i = getIntent();
-        Log.d("MAIN", i.getStringExtra("Day"));
+        Log.d("MAIN", i.getStringExtra("CityName"));
 
+        Log.d(LOG_TAG, "Passing weather data to the WeatherFragment as Bundled arguments");
         Bundle args = new Bundle();
-        args.putString("Day", i.getStringExtra("Day"));
+        args.putString("CityName", i.getStringExtra("CityName"));
         weatherFragment.setArguments(args);
 
 

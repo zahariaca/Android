@@ -71,7 +71,7 @@ public class WeatherFragment extends Fragment {
 */
 
 
-        location.setText(getArguments().getString("Day"));
+        location.setText(getArguments().getString("CityName"));
         btn = (Button) rootView.findViewById(R.id.btn_test);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

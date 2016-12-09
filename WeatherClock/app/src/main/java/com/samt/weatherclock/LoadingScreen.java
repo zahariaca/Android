@@ -3,6 +3,7 @@ package com.samt.weatherclock;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.samt.weatherclock.weatherapi.FetchWeatherTask;
 
@@ -11,7 +12,8 @@ import java.util.Map;
 
 
 public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask.LoadingTaskFinishedListener {
-    Map<String, String> weatherHashMap;
+    public final String LOG_TAG = LoadingScreen.class.getSimpleName();
+    private Map<String, String> weatherHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +34,18 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
                 }
             }
         }.start();
+        Log.d(LOG_TAG, "Fetching weather data");
         new FetchWeatherTask(this).execute("Bucharest");
     }
 
     private void completeSplash() {
         startApp();
+        Log.d(LOG_TAG, "Finishing LoadingScreen activity");
         finish(); // Don't forget to finish this Splash Activity so the user can't return to it!
     }
 
     private void startApp() {
+        Log.d(LOG_TAG, "Starting the next activity");
         Intent intent = new Intent(LoadingScreen.this, MainActivity.class);
         for (Map.Entry<String, String> e : weatherHashMap.entrySet()) {
             intent.putExtra(e.getKey(), e.getValue());
@@ -51,6 +56,7 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
 
     @Override
     public void onTaskFinished(HashMap<String, String> weatherHashMap) {
+        Log.d(LOG_TAG, "Data was fetched, copying to weatherHashMap");
         this.weatherHashMap = weatherHashMap;
         completeSplash();
     }

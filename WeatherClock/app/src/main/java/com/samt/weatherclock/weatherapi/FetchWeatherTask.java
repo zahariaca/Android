@@ -86,10 +86,14 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         final String OWM_MIN = "min";
         final String OWM_DESCRIPTION = "main";
 
-        JSONObject forecastJson = new JSONObject(forecastJsonStr);
-        JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
-
         HashMap<String, String> hashMap = new HashMap<String, String>();
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        //JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
+
+        String cityName = forecastJson.getString("name");
+
+
 
         // OWM returns daily forecasts based upon the local time of the city that is being
         // asked for, which means that we need to know the GMT offset to translate this data
@@ -98,7 +102,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         // Since this data is also sent in-order and the first day is always the
         // current day, we're going to take advantage of that to get a nice
         // normalized UTC date for all of our weather.
-
+/*
         Time dayTime = new Time();
         dayTime.setToNow();
 
@@ -136,14 +140,17 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
             double high = temperatureObject.getDouble(OWM_MAX);
             double low = temperatureObject.getDouble(OWM_MIN);
 
+            //String cityName = dayForecast.getString("name");
+
             highAndLow = formatHighLows(high, low);
-            //resultStrs[i] = day + " - " + description + " - " + highAndLow;
-            hashMap.put("Day", day);
+            //resultStrs[i] = day + " - " + description + " - " + highAndLow;*/
+            hashMap.put("CityName", cityName);
+/*            hashMap.put("Day", day);
             hashMap.put("Description", description);
-            hashMap.put("Temperature", highAndLow);
+            hashMap.put("Temperature", highAndLow);*/
 
 
-        }
+        //}
         return hashMap;
     }
 
@@ -166,7 +173,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
-            final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+            final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
             final String QUERY_PARAM = "q";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
