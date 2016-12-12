@@ -1,7 +1,13 @@
 package com.samt.weatherclock.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -48,6 +54,7 @@ public class WeatherFragment extends Fragment implements FetchWeatherTask.Loadin
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons-regular-webfont.ttf");
 
     }
+
 
     @Nullable
     @Override
@@ -138,21 +145,42 @@ public class WeatherFragment extends Fragment implements FetchWeatherTask.Loadin
 
     // Fetching weather data for when the refresh button is clicked
     public void fetchWeather() {
-
-        try {
-            gpsData = new GpsData(getActivity());
-            gpsData.getData();
-            Log.d(LOG_TAG, "LATITUDE: " + gpsData.getLatitude());
-            Log.d(LOG_TAG, "LONGITUDE: " + gpsData.getLongitude());
-            Log.d(LOG_TAG, "inside of fetchWeathe method");
-            new FetchWeatherTask(this).execute(gpsData.getLatitude(), gpsData.getLongitude());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            if (gpsData != null) {
-                gpsData = null;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (isNetworkAvailable()) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                String restoredText = sharedPreferences.getString("CityName", null);
+                Log.d(LOG_TAG,"Text from shared preference: " +  restoredText);
+                new FetchWeatherTask(this).execute(restoredText);
+            } else {
+                Log.d(LOG_TAG, "No network");
+            }
+        } else {
+            try {
+                gpsData = new GpsData(getActivity());
+                gpsData.getData();
+                Log.d(LOG_TAG, "LATITUDE: " + gpsData.getLatitude());
+                Log.d(LOG_TAG, "LONGITUDE: " + gpsData.getLongitude());
+                Log.d(LOG_TAG, "inside of fetchWeathe method");
+                if (isNetworkAvailable()) {
+                    new FetchWeatherTask(this).execute(gpsData.getLatitude(), gpsData.getLongitude());
+                } else {
+                    Log.d(LOG_TAG, "No network");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (gpsData != null) {
+                    gpsData = null;
+                }
             }
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     // Receiving the weather data with the help of the LoadingTaskFinishedListener interface from FetchWeatherTask
@@ -186,5 +214,11 @@ public class WeatherFragment extends Fragment implements FetchWeatherTask.Loadin
         temperature.setText(weatherHashMap.get("Temperature"));
         humidity.setText(weatherHashMap.get("Humidity"));
         pressure.setText(weatherHashMap.get("Pressure"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
     }
 }

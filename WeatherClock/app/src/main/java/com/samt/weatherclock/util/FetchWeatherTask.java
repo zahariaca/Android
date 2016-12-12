@@ -190,30 +190,45 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         int numDays = 16;
         String key = "aeefe119edb695e78e33dd7eb70ef6d2";
 
+
+
         try {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
+            final String QUERY_PARAM = "q";
             final String QUERY_PARAM1 = "lat";
             final String QUERY_PARAM2 = "lon";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
             final String DAYS_PARAM = "cnt";
             final String KEY_PARAM = "APPID";
+            URL url = null;
 
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM1, params[0])
-                    .appendQueryParameter(QUERY_PARAM2, params[1])
-                    .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(UNITS_PARAM, units)
-                    .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-                    .appendQueryParameter(KEY_PARAM, key)
-                    .build();
+            if(params.length == 2) {
+                Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM1, params[0])
+                        .appendQueryParameter(QUERY_PARAM2, params[1])
+                        .appendQueryParameter(FORMAT_PARAM, format)
+                        .appendQueryParameter(UNITS_PARAM, units)
+                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                        .appendQueryParameter(KEY_PARAM, key)
+                        .build();
 
-            Log.d(LOG_TAG, builtUri.toString());
-            URL url = new URL(builtUri.toString());
-
+                Log.d(LOG_TAG, builtUri.toString());
+                url = new URL(builtUri.toString());
+            } else if (params.length == 1){
+                Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, params[0])
+                        .appendQueryParameter(FORMAT_PARAM, format)
+                        .appendQueryParameter(UNITS_PARAM, units)
+                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                        .appendQueryParameter(KEY_PARAM, key)
+                        .build();
+                Log.d(LOG_TAG, builtUri.toString());
+                url = new URL(builtUri.toString());
+            }
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

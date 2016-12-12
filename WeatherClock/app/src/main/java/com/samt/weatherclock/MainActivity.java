@@ -1,7 +1,9 @@
 package com.samt.weatherclock;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import com.samt.weatherclock.adapters.ViewPagerAdapter;
 import com.samt.weatherclock.fragments.AlarmFragment;
 import com.samt.weatherclock.fragments.DialogAdd;
+import com.samt.weatherclock.fragments.DialogChangeLocation;
 import com.samt.weatherclock.fragments.WeatherFragment;
 
 
@@ -52,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MAIN", i.getStringExtra("Temperature"));
         Log.d("MAIN", i.getStringExtra("Humidity"));
         Log.d("MAIN", i.getStringExtra("Pressure"));
-
 
         Log.d(LOG_TAG, "Passing weather data to the WeatherFragment as Bundled arguments");
         Bundle args = new Bundle();
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             case R.id.action_settings:
                 Toast.makeText(this, "Settings toast for testing", Toast.LENGTH_SHORT).show();
+                showDialogChangeLocation();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -122,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
     private void showDialogAdd() {
         DialogAdd dialog = new DialogAdd();
         dialog.show(getFragmentManager(), "Add");
+    }
+
+    private void showDialogChangeLocation() {
+        DialogChangeLocation dialog = new DialogChangeLocation();
+        dialog.show(getFragmentManager(), "ChangeLocation");
     }
 
 }

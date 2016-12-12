@@ -2,11 +2,15 @@ package com.samt.weatherclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.samt.weatherclock.util.FetchWeatherTask;
 import com.samt.weatherclock.util.GpsData;
@@ -24,17 +28,31 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
 
-        GpsData gpsData = new GpsData(this);
-        gpsData.getData();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor cityName = preferences.edit();
+        cityName.putString("CityName", "Bucharest");
+        cityName.commit();
 
-        Log.d(LOG_TAG, "LATITUDE: " + gpsData.getLatitude());
-        Log.d(LOG_TAG, "LONGITUDE: " + gpsData.getLongitude());
-
-        Log.d(LOG_TAG, "Fetching weather data");
-        if (!isNetworkAvailable()) {
-            Log.d(LOG_TAG, "No network");
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Toast.makeText(this, "Sorry mate...", Toast.LENGTH_SHORT).show();
+            if (isNetworkAvailable()) {
+                new FetchWeatherTask(this).execute(preferences.getString("CityName", null));
+            } else {
+                Log.d(LOG_TAG, "No network");
+            }
         } else {
-            new FetchWeatherTask(this).execute(gpsData.getLatitude(), gpsData.getLongitude());
+            GpsData gpsData = new GpsData(this);
+            gpsData.getData();
+
+            Log.d(LOG_TAG, "LATITUDE: " + gpsData.getLatitude());
+            Log.d(LOG_TAG, "LONGITUDE: " + gpsData.getLongitude());
+
+            Log.d(LOG_TAG, "Fetching weather data");
+            if (isNetworkAvailable()) {
+                new FetchWeatherTask(this).execute(gpsData.getLatitude(), gpsData.getLongitude());
+            } else {
+                Log.d(LOG_TAG, "No network");
+            }
         }
     }
 
