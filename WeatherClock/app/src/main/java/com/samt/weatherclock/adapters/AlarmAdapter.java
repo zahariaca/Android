@@ -8,17 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.samt.weatherclock.Person;
+import com.samt.weatherclock.util.AlarmMockData;
 import com.samt.weatherclock.R;
 
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.PersonViewHolder>{
-    private List<Person> persons;
+    private List<AlarmMockData> alarmMockDatas;
     private Context context;
 
-    public AlarmAdapter(List<Person> persons){
-        this.persons = persons;
+    public AlarmAdapter(List<AlarmMockData> alarmMockDatas){
+        this.alarmMockDatas = alarmMockDatas;
         this.context = context;
     }
 
@@ -31,13 +31,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.PersonViewHo
 
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, int position) {
-        personViewHolder.personName.setText(persons.get(position).name);
-        personViewHolder.personAge.setText(persons.get(position).age);
+        personViewHolder.personName.setText(alarmMockDatas.get(position).name);
+        personViewHolder.personAge.setText(alarmMockDatas.get(position).age);
     }
 
     @Override
     public int getItemCount() {
-        return persons.size();
+        return alarmMockDatas.size();
     }
 
     @Override

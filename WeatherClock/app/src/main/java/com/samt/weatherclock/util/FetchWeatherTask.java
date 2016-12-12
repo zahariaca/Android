@@ -1,16 +1,9 @@
-package com.samt.weatherclock.weatherapi;
+package com.samt.weatherclock.util;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.format.Time;
 import android.util.Log;
 
-import com.samt.weatherclock.MainActivity;
-import com.samt.weatherclock.Person;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by AZaharia on 12/8/2016.
@@ -101,7 +92,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         String description = weather.getString("description");
         String id = weather.getString("id");
         String sunrise = sys.getString("sunrise");
-        String sunset = sys.getString("sunrise");
+        String sunset = sys.getString("sunset");
         String temperature = main.getString("temp");
         String humidity = main.getString("humidity");
         String pressure = main.getString("pressure");
@@ -204,20 +195,23 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
-            final String QUERY_PARAM = "q";
+            final String QUERY_PARAM1 = "lat";
+            final String QUERY_PARAM2 = "lon";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
             final String DAYS_PARAM = "cnt";
             final String KEY_PARAM = "APPID";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params[0])
+                    .appendQueryParameter(QUERY_PARAM1, params[0])
+                    .appendQueryParameter(QUERY_PARAM2, params[1])
                     .appendQueryParameter(FORMAT_PARAM, format)
                     .appendQueryParameter(UNITS_PARAM, units)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                     .appendQueryParameter(KEY_PARAM, key)
                     .build();
 
+            Log.d(LOG_TAG, builtUri.toString());
             URL url = new URL(builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection

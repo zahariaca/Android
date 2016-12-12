@@ -8,7 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.samt.weatherclock.weatherapi.FetchWeatherTask;
+import com.samt.weatherclock.util.FetchWeatherTask;
+import com.samt.weatherclock.util.GpsData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,27 +24,20 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
 
-/*        new Thread() {
+        GpsData gpsData = new GpsData(this);
+        gpsData.getData();
 
-            @Override
-            public void run() {
-                try {
-                    super.run();
-                    sleep(1000);
-                } catch (Exception e) {
+        Log.d(LOG_TAG, "LATITUDE: " + gpsData.getLatitude());
+        Log.d(LOG_TAG, "LONGITUDE: " + gpsData.getLongitude());
 
-                } finally {
-
-                }
-            }
-        }.start();*/
         Log.d(LOG_TAG, "Fetching weather data");
-        if(!isNetworkAvailable()){
+        if (!isNetworkAvailable()) {
             Log.d(LOG_TAG, "No network");
-        }else {
-            new FetchWeatherTask(this).execute("Bucharest");
+        } else {
+            new FetchWeatherTask(this).execute(gpsData.getLatitude(), gpsData.getLongitude());
         }
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,4 +68,5 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
         this.weatherHashMap = weatherHashMap;
         completeSplash();
     }
+
 }

@@ -111,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Add an alarm button toast for testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_refresh:
-                Toast.makeText(this, "Refresh button toast for testing", Toast.LENGTH_SHORT).show();
-                break;
+                return false;
             case R.id.action_settings:
                 Toast.makeText(this, "Settings toast for testing", Toast.LENGTH_SHORT).show();
                 break;

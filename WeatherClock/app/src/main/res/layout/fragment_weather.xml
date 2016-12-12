@@ -8,12 +8,7 @@
     android:paddingTop="56dp"
     android:id="@+id/weather_fragment">
 
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:layout_below="@+id/tv_temperature"/>
+
 
     <TextView
         android:id="@+id/tv_location_city"
@@ -43,11 +38,22 @@
         android:textColor="@color/colorAccent"
         android:textSize="90sp" />
 
+    <ImageButton
+        android:id="@+id/btn_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_refresh"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/weather_icon"
+        android:background="@null"
+        android:alpha="0.5"
+        android:layout_marginRight="25dp"/>
+
     <TextView
         android:id="@+id/tv_weatherType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/weather_icon"
+        android:layout_below="@+id/btn_refresh"
         android:layout_centerHorizontal="true"
         android:text="Sunny"
         android:textSize="15sp" />
