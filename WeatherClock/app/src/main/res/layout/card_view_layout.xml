@@ -18,7 +18,7 @@
             android:id="@+id/person_name"
             android:layout_alignParentTop="true"
             android:textSize="30sp"
-            android:text="8:00"
+            android:text="Name"
             />
 
         <TextView
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/person_age"
             android:layout_below="@+id/person_name"
+            android:text="8:00"
             />
         <ImageView
             android:layout_centerVertical="true"

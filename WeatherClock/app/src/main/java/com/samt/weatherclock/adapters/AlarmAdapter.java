@@ -3,22 +3,24 @@ package com.samt.weatherclock.adapters;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.samt.weatherclock.util.AlarmMockData;
 import com.samt.weatherclock.R;
+import com.samt.weatherclock.util.AlarmModel;
 
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.PersonViewHolder>{
-    private List<AlarmMockData> alarmMockDatas;
+    private List<AlarmModel> alarmData;
     private Context context;
 
-    public AlarmAdapter(List<AlarmMockData> alarmMockDatas){
-        this.alarmMockDatas = alarmMockDatas;
+    public AlarmAdapter(List<AlarmModel> alarmMockDatas){
+        this.alarmData = alarmMockDatas;
         this.context = context;
     }
 
@@ -31,13 +33,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.PersonViewHo
 
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, int position) {
-        personViewHolder.personName.setText(alarmMockDatas.get(position).name);
-        personViewHolder.personAge.setText(alarmMockDatas.get(position).age);
+        personViewHolder.personName.setText(alarmData.get(position).getName());
+        personViewHolder.personAge.setText(alarmData.get(position).getTimeFormated());
     }
 
     @Override
     public int getItemCount() {
-        return alarmMockDatas.size();
+        if(alarmData != null) {
+            return alarmData.size();
+        }
+        return 0;
     }
 
     @Override

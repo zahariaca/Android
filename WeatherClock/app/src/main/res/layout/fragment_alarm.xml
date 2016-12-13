@@ -3,7 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#EEEEEE">
+    android:background="#EEEEEE"
+    android:id="@+id/alarm_fragment">
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="You have no alarms! Press the + button on top to create your first alarm!"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:visibility="invisible" />
 
     <include layout="@layout/activity_main_rv" />
 

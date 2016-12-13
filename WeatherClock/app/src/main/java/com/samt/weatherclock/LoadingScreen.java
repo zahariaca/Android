@@ -9,7 +9,9 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.samt.weatherclock.util.FetchWeatherTask;
@@ -27,6 +29,11 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
+
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor cityName = preferences.edit();
@@ -54,6 +61,8 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
                 Log.d(LOG_TAG, "No network");
             }
         }
+
+        return super.onCreateView(name, context, attrs);
     }
 
     private boolean isNetworkAvailable() {

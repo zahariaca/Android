@@ -1,8 +1,11 @@
 package com.samt.weatherclock;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,18 +22,25 @@ import com.samt.weatherclock.fragments.DialogAdd;
 import com.samt.weatherclock.fragments.DialogChangeLocation;
 import com.samt.weatherclock.fragments.WeatherFragment;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompleteListener {
     public final String LOG_TAG = MainActivity.class.getSimpleName();
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
+    private AlarmFragment alarmFragment =new AlarmFragment();
     private WeatherFragment weatherFragment = new WeatherFragment();
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Realm.init(this);
+
         Log.d(LOG_TAG, "Creating toolbar");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new AlarmFragment(), "ALARMS");
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(alarmFragment, "ALARMS");
         adapter.addFragment(weatherFragment, "WEATHER");
         viewPager.setAdapter(adapter);
     }
@@ -124,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDialogAdd() {
         DialogAdd dialog = new DialogAdd();
+        dialog.setOnCompleteListeneristener(this);
         dialog.show(getFragmentManager(), "Add");
     }
 
@@ -132,4 +143,17 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getFragmentManager(), "ChangeLocation");
     }
 
+    @Override
+    public void onComplete(String name, int hour, int minute) {
+        Log.d(LOG_TAG, "data received to Activity... send to alarm fragment");
+        Log.d(LOG_TAG, "RECEIVED: " + name + " / " + hour + " / " + minute);
+        alarmFragment.onComplete(name,hour,minute);
+ /*      AlarmFragment alarmFragment = (AlarmFragment) getSupportFragmentManager().findFragmentById(R.id.alarm_fragment);
+        if(alarmFragment != null) {
+            alarmFragment.showLog("test");
+        }else {
+            Log.d(LOG_TAG, "FRAGMENT NULL");
+        }
+        Log.d(LOG_TAG,"This came from the DialogAdd: " + time);*/
+    }
 }
