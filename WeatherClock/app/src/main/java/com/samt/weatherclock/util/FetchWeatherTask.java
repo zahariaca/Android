@@ -14,13 +14,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-
-/**
- * Created by AZaharia on 12/8/2016.
- */
 
 public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,String>>{
     public interface LoadingTaskFinishedListener {

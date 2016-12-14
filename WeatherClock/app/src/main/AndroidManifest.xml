@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme.Base">
         <activity
-            android:name=".LoadingScreen"
+            android:name=".activities.LoadingScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

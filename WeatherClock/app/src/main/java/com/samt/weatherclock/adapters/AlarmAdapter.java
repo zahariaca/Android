@@ -1,14 +1,11 @@
 package com.samt.weatherclock.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.samt.weatherclock.R;
 import com.samt.weatherclock.util.AlarmModel;
@@ -17,16 +14,14 @@ import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.PersonViewHolder>{
     private List<AlarmModel> alarmData;
-    private Context context;
 
     public AlarmAdapter(List<AlarmModel> alarmMockDatas){
         this.alarmData = alarmMockDatas;
-        this.context = context;
     }
 
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_activity_rv_card_view_layout, parent, false);
         PersonViewHolder pvh = new PersonViewHolder(v);
         return pvh;
     }

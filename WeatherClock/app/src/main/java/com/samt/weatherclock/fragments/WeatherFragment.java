@@ -26,10 +26,6 @@ import com.samt.weatherclock.util.FetchWeatherTask;
 import java.util.Date;
 import java.util.HashMap;
 
-/**
- * Created by AZaharia on 12/7/2016.
- */
-
 public class WeatherFragment extends Fragment implements FetchWeatherTask.LoadingTaskFinishedListener {
     public final String LOG_TAG = WeatherFragment.class.getSimpleName();
     private GpsData gpsData;
@@ -55,11 +51,10 @@ public class WeatherFragment extends Fragment implements FetchWeatherTask.Loadin
 
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
+        View rootView = inflater.inflate(R.layout.main_activity_fragment_weather, container, false);
 
         btn_refresh = (ImageButton) rootView.findViewById(R.id.btn_refresh);
         location = (TextView) rootView.findViewById(R.id.tv_location_city);

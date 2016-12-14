@@ -1,4 +1,4 @@
-package com.samt.weatherclock;
+package com.samt.weatherclock.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.samt.weatherclock.R;
 import com.samt.weatherclock.util.FetchWeatherTask;
 import com.samt.weatherclock.util.GpsData;
 
@@ -28,7 +29,7 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading_screen);
+        setContentView(R.layout.loading_screen_activity);
 
     }
 

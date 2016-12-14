@@ -2,23 +2,24 @@ package com.samt.weatherclock.util;
 
 import io.realm.RealmObject;
 
-/**
- * Created by AZaharia on 12/13/2016.
- */
-
-public class AlarmModel extends RealmObject{
+public class AlarmModel extends RealmObject {
     private String name;
     private int hour;
     private int minute;
     private String timeFormated;
 
-    public AlarmModel(){}
+    public AlarmModel() {
+    }
 
-    public AlarmModel(String name, int hour, int minute){
+    public AlarmModel(String name, int hour, int minute) {
         this.name = name;
         this.hour = hour;
         this.minute = minute;
-        this.timeFormated = hour + ":" + minute;
+        if (minute >= 10) {
+            this.timeFormated = hour + ":" + minute;
+        } else {
+            this.timeFormated = hour + ":0" + minute;
+        }
     }
 
     public String getName() {

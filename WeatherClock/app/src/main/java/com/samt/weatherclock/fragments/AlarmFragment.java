@@ -1,6 +1,5 @@
 package com.samt.weatherclock.fragments;
 
-import android.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,14 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-
-
-/**
- * Created by AZaharia on 12/7/2016.
- */
 
 public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListener {
     public final String LOG_TAG = AlarmFragment.class.getSimpleName();
@@ -44,7 +37,6 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     public AlarmFragment() {
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +48,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
+        View rootView = inflater.inflate(R.layout.main_activity_fragment_alarm, container, false);
 
         textView = (TextView) rootView.findViewById(R.id.tv_no_data);
 

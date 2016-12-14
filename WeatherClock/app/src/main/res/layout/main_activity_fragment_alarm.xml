@@ -15,6 +15,6 @@
         android:textAppearance="?android:textAppearanceMedium"
         android:visibility="invisible" />
 
-    <include layout="@layout/activity_main_rv" />
+    <include layout="@layout/main_activity_fragment_alarm_rv" />
 
 </RelativeLayout>

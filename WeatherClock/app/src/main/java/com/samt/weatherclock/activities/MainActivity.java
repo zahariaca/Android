@@ -1,12 +1,8 @@
-package com.samt.weatherclock;
+package com.samt.weatherclock.activities;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.samt.weatherclock.R;
 import com.samt.weatherclock.adapters.ViewPagerAdapter;
 import com.samt.weatherclock.fragments.AlarmFragment;
 import com.samt.weatherclock.fragments.DialogAdd;
@@ -23,7 +20,6 @@ import com.samt.weatherclock.fragments.DialogChangeLocation;
 import com.samt.weatherclock.fragments.WeatherFragment;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompleteListener {
@@ -31,14 +27,14 @@ public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompl
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
-    private AlarmFragment alarmFragment =new AlarmFragment();
+    private AlarmFragment alarmFragment = new AlarmFragment();
     private WeatherFragment weatherFragment = new WeatherFragment();
     private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         Realm.init(this);
 
         Log.d(LOG_TAG, "Creating toolbar");
@@ -66,39 +62,7 @@ public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompl
         Log.d("MAIN", i.getStringExtra("Humidity"));
         Log.d("MAIN", i.getStringExtra("Pressure"));
 
-        Log.d(LOG_TAG, "Passing weather data to the WeatherFragment as Bundled arguments");
-        Bundle args = new Bundle();
-        args.putString("CityName", i.getStringExtra("CityName"));
-        args.putString("Updated", i.getStringExtra("Updated"));
-        args.putString("Id", i.getStringExtra("Id"));
-        args.putString("Sunrise", i.getStringExtra("Sunrise"));
-        args.putString("Sunset", i.getStringExtra("Sunset"));
-        args.putString("Description", i.getStringExtra("Description"));
-        args.putString("Temperature", i.getStringExtra("Temperature"));
-        args.putString("Humidity", i.getStringExtra("Humidity"));
-        args.putString("Pressure", i.getStringExtra("Pressure"));
-        weatherFragment.setArguments(args);
-
-
-/*        realmConfiguration = new RealmConfiguration.Builder().name("weatherRealm").build();
-        Realm.setDefaultConfiguration(realmConfiguration);
-        realm = Realm.getInstance(realmConfiguration);*/
-
-        /*initializeData();
-
-        FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-        fetchWeatherTask.execute("Bucharest");
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        mRecyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(llm);
-
-        alarmAdapter = new AlarmAdapter(persons);
-        mRecyclerView.setAdapter(alarmAdapter);*/
-
+        passWeatherData(i);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -125,8 +89,11 @@ public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompl
             case R.id.action_refresh:
                 return false;
             case R.id.action_settings:
-                Toast.makeText(this, "Settings toast for testing", Toast.LENGTH_SHORT).show();
-                showDialogChangeLocation();
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    showDialogChangeLocation();
+                } else {
+                    Toast.makeText(this, "Settings menu is for Android 6+", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -147,13 +114,21 @@ public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompl
     public void onComplete(String name, int hour, int minute) {
         Log.d(LOG_TAG, "data received to Activity... send to alarm fragment");
         Log.d(LOG_TAG, "RECEIVED: " + name + " / " + hour + " / " + minute);
-        alarmFragment.onComplete(name,hour,minute);
- /*      AlarmFragment alarmFragment = (AlarmFragment) getSupportFragmentManager().findFragmentById(R.id.alarm_fragment);
-        if(alarmFragment != null) {
-            alarmFragment.showLog("test");
-        }else {
-            Log.d(LOG_TAG, "FRAGMENT NULL");
-        }
-        Log.d(LOG_TAG,"This came from the DialogAdd: " + time);*/
+        alarmFragment.onComplete(name, hour, minute);
+    }
+
+    private void passWeatherData(Intent i) {
+        Log.d(LOG_TAG, "Passing weather data to the WeatherFragment as Bundled arguments");
+        Bundle args = new Bundle();
+        args.putString("CityName", i.getStringExtra("CityName"));
+        args.putString("Updated", i.getStringExtra("Updated"));
+        args.putString("Id", i.getStringExtra("Id"));
+        args.putString("Sunrise", i.getStringExtra("Sunrise"));
+        args.putString("Sunset", i.getStringExtra("Sunset"));
+        args.putString("Description", i.getStringExtra("Description"));
+        args.putString("Temperature", i.getStringExtra("Temperature"));
+        args.putString("Humidity", i.getStringExtra("Humidity"));
+        args.putString("Pressure", i.getStringExtra("Pressure"));
+        weatherFragment.setArguments(args);
     }
 }

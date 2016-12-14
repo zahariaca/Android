@@ -9,19 +9,10 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:paddingTop="5dp"
+        android:textSize="15dp"
+        android:paddingLeft="16dp"
         android:text="Add a name" />
-
-    <ImageButton
-        android:id="@+id/ib_exit"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/tv_name"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@null"
-        app:srcCompat="@drawable/ic_action_cancel" />
 
     <EditText
         android:id="@+id/et_name"
@@ -29,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_name"
         android:hint="Your alarm name"
-        android:padding="10dp"
+        android:textSize="15dp"
+        android:paddingLeft="16dp"
         android:inputType="textVisiblePassword"/>
 
     <TimePicker
@@ -41,12 +33,5 @@
         android:headerBackground="@color/colorAccent"
         android:numbersSelectorColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/btn_commit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timePicker"
-        android:layout_centerInParent="true"
-        android:text="Commit"
-        android:textAllCaps="false" />
+
 </RelativeLayout>

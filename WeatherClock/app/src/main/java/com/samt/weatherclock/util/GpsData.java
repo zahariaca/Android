@@ -10,10 +10,6 @@ import android.util.Log;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-/**
- * Created by AZaharia on 12/12/2016.
- */
-
 public class GpsData implements LocationListener {
     public final String LOG_TAG = GpsData.class.getSimpleName();
     private Context context;
