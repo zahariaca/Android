@@ -1,5 +1,9 @@
 package com.samt.weatherclock.fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,10 +20,14 @@ import android.widget.Toast;
 import com.samt.weatherclock.R;
 
 import com.samt.weatherclock.adapters.AlarmAdapter;
+import com.samt.weatherclock.services.AlarmReceiver;
 import com.samt.weatherclock.util.AlarmModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -31,8 +39,13 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     private TextView textView;
     private LinearLayoutManager llm;
     private AlarmAdapter alarmAdapter;
-    private List<AlarmModel> alarmMockDatas = new ArrayList<>();;
+    private List<AlarmModel> alarmMockDatas = new ArrayList<>();
+    ;
     private Realm realm;
+    private AlarmManager alarmManager;
+    private Intent myIntent;
+    private Map<String, PendingIntent> pendingIntents = new HashMap<String, PendingIntent>();
+    private static int broadCastId = 0;
 
     public AlarmFragment() {
     }
@@ -40,7 +53,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("AlarmReal").build();
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("AlarmRealm3").build();
         Realm.setDefaultConfiguration(realmConfiguration);
         realm = Realm.getDefaultInstance();
     }
@@ -59,6 +72,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
         llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
 
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -68,17 +82,34 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                String uniqueId = alarmMockDatas.get(viewHolder.getAdapterPosition()).getId();
+                Log.d(LOG_TAG, "This is the id for the object that is being deleted : " + uniqueId);
 
-                RealmResults<AlarmModel> result = realm.where(AlarmModel.class).equalTo("name",alarmMockDatas.get(viewHolder.getAdapterPosition()).getName()).findAll();
+                // Find in the Realm db all the refrences that match the card that is being swiped(its position)
+                // by using the id of the object represented in that card
+                // delete that refrence from the DB
+                RealmResults<AlarmModel> result = realm.where(AlarmModel.class).equalTo("id", uniqueId).findAll();
                 realm.beginTransaction();
                 result.deleteFirstFromRealm();
                 realm.commitTransaction();
+                Log.d(LOG_TAG, "Refrence deleted from Realm db");
 
+                //cancel the pending intent of the alarm
+                if (pendingIntents.containsKey(uniqueId)) {
+                    alarmManager.cancel(pendingIntents.get(uniqueId));
+                    pendingIntents.remove(uniqueId);
+                    getActivity().sendBroadcast(myIntent);
+                    Log.d(LOG_TAG, "Alarm canceled in alarmManager");
+                }
+
+                // remove the object from the List of alarms by using the swiped card position
                 alarmMockDatas.remove(viewHolder.getAdapterPosition());
+                Log.d(LOG_TAG, "Alarm card removed from view");
 
-                if(!alarmMockDatas.isEmpty()) {
+                // update the view
+                if (!alarmMockDatas.isEmpty()) {
                     alarmAdapter.notifyDataSetChanged();
-                }else {
+                } else {
                     textView.setVisibility(View.VISIBLE);
                 }
                 Toast.makeText(getActivity(), "Removed the alarm!", Toast.LENGTH_SHORT).show();
@@ -92,7 +123,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
             textView.setVisibility(View.INVISIBLE);
             alarmAdapter = new AlarmAdapter(alarmMockDatas);
             recyclerView.setAdapter(alarmAdapter);
-        }else {
+        } else {
             textView.setVisibility(View.VISIBLE);
         }
 
@@ -103,31 +134,58 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     private void initializeData() {
 
         RealmResults<AlarmModel> realmResults = realm.where(AlarmModel.class).findAll();
-        for (AlarmModel alarmModel : realmResults){
+        for (AlarmModel alarmModel : realmResults) {
             alarmMockDatas.add(alarmModel);
         }
 
     }
 
     @Override
-    public void onComplete(String name, int hour, int minute) {
+    public void onComplete(String id, String name, int hour, int minute) {
         Log.d(LOG_TAG, "Finally received the data in " + LOG_TAG);
-        Log.d(LOG_TAG, "RECEIVED: " + name + " / " + hour + " / " + minute);
-        if(alarmAdapter != null) {
+        Log.d(LOG_TAG, "RECEIVED: " + name + " / " + id + " / " + hour + " / " + minute + " subString : " + id.substring(0, 4));
+        Integer testId = Integer.parseInt(id.substring(0, 4), 16);
+
+        RealmResults<AlarmModel> realmResults = realm.where(AlarmModel.class).findAll();
+        for (AlarmModel alarmModel : realmResults) {
+            Log.d(LOG_TAG, "REALM RESULTS: " + "Name: " + alarmModel.getName() + " UUID : " + alarmModel.getId() + " Hour: " + alarmModel.getHour() + " Minute :  " + alarmModel.getMinute());
+        }
+
+        if (alarmAdapter != null) {
             textView.setVisibility(View.INVISIBLE);
-            alarmMockDatas.add(new AlarmModel(name, hour, minute));
+            alarmMockDatas.add(new AlarmModel(id, name, hour, minute));
             alarmAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             textView.setVisibility(View.INVISIBLE);
             alarmAdapter = new AlarmAdapter(alarmMockDatas);
-            alarmMockDatas.add(new AlarmModel(name, hour, minute));
+            alarmMockDatas.add(new AlarmModel(id, name, hour, minute));
             recyclerView.setAdapter(alarmAdapter);
         }
 
-        RealmResults<AlarmModel> realmResults = realm.where(AlarmModel.class).findAll();
-        for (AlarmModel alarmModel : realmResults){
-            Log.d(LOG_TAG,"REAL RESULTS: "+ "Name: " + alarmModel.getName() + " " +alarmModel.getHour() + " " + alarmModel.getMinute());
-        }
+        //creates a Calendar object that is set to the hour and minute selected in the DialogAdd dialog
+        Calendar calendar = getACalendar(hour, minute);
+        Log.d(LOG_TAG, "The time to be set in AlarmManager is : " + calendar.getTimeInMillis() + " actual time value : " + calendar.getTime());
+
+        Log.d(LOG_TAG, "Creating intent and pending intent for the alarms");
+
+        myIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
+        // we create a HashMap to store all of our pending intents
+        // this is needed to be able to actually cancel alarms when swiping
+        pendingIntents.put(id, PendingIntent.getBroadcast(getActivity(), testId, myIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Log.d(LOG_TAG, "Finished creating intent and pending intent for the alarms");
+
+        //set the alarm manager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntents.get(id));
+        Log.d(LOG_TAG, "Set the AlarmManager");
+
+    }
+
+    private Calendar getACalendar(int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar;
     }
 
     @Override

@@ -111,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements DialogAdd.OnCompl
     }
 
     @Override
-    public void onComplete(String name, int hour, int minute) {
+    public void onComplete(String id,String name, int hour, int minute) {
         Log.d(LOG_TAG, "data received to Activity... send to alarm fragment");
-        Log.d(LOG_TAG, "RECEIVED: " + name + " / " + hour + " / " + minute);
-        alarmFragment.onComplete(name, hour, minute);
+        Log.d(LOG_TAG, "RECEIVED: " + name + " / "+ id + " / " + hour + " / " + minute);
+        alarmFragment.onComplete(id,name, hour, minute);
     }
 
     private void passWeatherData(Intent i) {

@@ -1,8 +1,13 @@
 package com.samt.weatherclock.util;
 
+import java.util.UUID;
+
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class AlarmModel extends RealmObject {
+    @PrimaryKey
+    private String id;
     private String name;
     private int hour;
     private int minute;
@@ -11,7 +16,8 @@ public class AlarmModel extends RealmObject {
     public AlarmModel() {
     }
 
-    public AlarmModel(String name, int hour, int minute) {
+    public AlarmModel(String id, String name, int hour, int minute) {
+        this.id = id;
         this.name = name;
         this.hour = hour;
         this.minute = minute;
@@ -52,5 +58,9 @@ public class AlarmModel extends RealmObject {
 
     public void setTimeFormated(String timeFormated) {
         this.timeFormated = timeFormated;
+    }
+
+    public String getId() {
+        return id;
     }
 }

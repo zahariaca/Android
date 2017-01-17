@@ -14,13 +14,15 @@ import android.widget.TimePicker;
 import com.samt.weatherclock.R;
 import com.samt.weatherclock.util.AlarmModel;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class DialogAdd extends DialogFragment {
 
     public interface OnCompleteListener {
-        void onComplete(String name, int hour, int minute);
+        void onComplete(String id, String name, int hour, int minute);
     }
 
     public final String LOG_TAG = DialogAdd.class.getSimpleName();
@@ -35,7 +37,7 @@ public class DialogAdd extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("AlarmReal").build();
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("AlarmRealm3").build();
         Realm.setDefaultConfiguration(realmConfiguration);
         realm = Realm.getDefaultInstance();
         ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -84,14 +86,17 @@ public class DialogAdd extends DialogFragment {
     }
 
     private void addAlarm() {
-        if (editText.getText().toString() != "") {
+        String id = UUID.randomUUID().toString();
+        if (!(String.valueOf(editText.getText()).equals(""))) {
             name = String.valueOf(editText.getText());
         } else {
             name = "Alarm";
         }
-        this.onCompleteListeneristener.onComplete(name, alarmHour, alarmMinute);
+        //passing the name, hour and minute back to the AlarmFragment
+        this.onCompleteListeneristener.onComplete(id,name, alarmHour, alarmMinute);
+        //writting the values into the Realm database
         realm.beginTransaction();
-        AlarmModel alarmModel = realm.createObject(AlarmModel.class);
+        AlarmModel alarmModel = realm.createObject(AlarmModel.class, id);
         alarmModel.setName(name);
         alarmModel.setHour(alarmHour);
         alarmModel.setMinute(alarmMinute);

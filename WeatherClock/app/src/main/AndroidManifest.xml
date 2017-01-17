@@ -27,6 +27,11 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"></activity>
+        
+        <receiver android:name=".services.AlarmReceiver"/>
+        
+        <service android:name=".services.RingtoneService"
+            android:enabled="true"/>
     </application>
 
 </manifest>
