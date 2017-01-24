@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:orientation="vertical"
+    android:layout_centerVertical="true"
+    android:paddingTop="120dp"
+    android:id="@+id/alarm_service_layout">
+
+
+
+    <TextView
+        android:id="@+id/tv_location_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Bucharest, RO"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/tv_location_lastupdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_location_city"
+        android:layout_centerHorizontal="true"
+        android:text="@string/last_update_dec_08_2014_13_45_58_am"
+        android:textSize="15sp" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/tv_location_lastupdated"
+        android:layout_gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ic_alarm_on"
+        android:alpha="25"/>
+
+    <TextView
+        android:id="@+id/tv_weatherType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:text="@string/sunny"
+        android:fontFamily=""
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_weatherType"
+        android:layout_centerHorizontal="true"
+        android:text="@string/humidity_59"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_humidity"
+        android:layout_centerHorizontal="true"
+        android:text="@string/pressure_977_hpa"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_pressure"
+        android:layout_centerHorizontal="true"
+        android:text="@string/_16_58_c"
+        android:textSize="50sp" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_temperature"
+        android:layout_centerHorizontal="true"
+        android:checked="false"
+        android:text="ToggleButton"
+        android:alpha="25"
+        android:textSize="25sp" />
+<!--
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_temperature"
+        android:layout_centerHorizontal="true"
+        android:text="Switch" />
+-->
+
+</RelativeLayout>

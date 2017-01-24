@@ -18,4 +18,9 @@
     <string name="weather_drizzle">&#xf01c;</string>
 
     <string name="place_not_found">Sorry, no weather data found.</string>
+    <string name="last_update_dec_08_2014_13_45_58_am">Last update: Dec 08, 2014 13:45:58 AM</string>
+    <string name="sunny">Sunny</string>
+    <string name="humidity_59">Humidity: 59%</string>
+    <string name="pressure_977_hpa">Pressure: 977 hPa</string>
+    <string name="_16_58_c">16.58 °C</string>
 </resources>

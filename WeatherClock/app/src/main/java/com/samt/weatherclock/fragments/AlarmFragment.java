@@ -40,12 +40,11 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     private LinearLayoutManager llm;
     private AlarmAdapter alarmAdapter;
     private List<AlarmModel> alarmMockDatas = new ArrayList<>();
-    ;
+
     private Realm realm;
     private AlarmManager alarmManager;
     private Intent myIntent;
     private Map<String, PendingIntent> pendingIntents = new HashMap<String, PendingIntent>();
-    private static int broadCastId = 0;
 
     public AlarmFragment() {
     }
@@ -53,6 +52,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Realm.init(getContext());
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("AlarmRealm3").build();
         Realm.setDefaultConfiguration(realmConfiguration);
         realm = Realm.getDefaultInstance();
@@ -85,9 +85,9 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
                 String uniqueId = alarmMockDatas.get(viewHolder.getAdapterPosition()).getId();
                 Log.d(LOG_TAG, "This is the id for the object that is being deleted : " + uniqueId);
 
-                // Find in the Realm db all the refrences that match the card that is being swiped(its position)
+                // Find in the Realm db all the references that match the card that is being swiped(its position)
                 // by using the id of the object represented in that card
-                // delete that refrence from the DB
+                // delete that reference from the DB
                 RealmResults<AlarmModel> result = realm.where(AlarmModel.class).equalTo("id", uniqueId).findAll();
                 realm.beginTransaction();
                 result.deleteFirstFromRealm();
@@ -169,6 +169,7 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
         Log.d(LOG_TAG, "Creating intent and pending intent for the alarms");
 
         myIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
+
         // we create a HashMap to store all of our pending intents
         // this is needed to be able to actually cancel alarms when swiping
         pendingIntents.put(id, PendingIntent.getBroadcast(getActivity(), testId, myIntent, PendingIntent.FLAG_UPDATE_CURRENT));

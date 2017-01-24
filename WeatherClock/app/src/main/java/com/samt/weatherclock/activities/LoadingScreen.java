@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.samt.weatherclock.R;
 import com.samt.weatherclock.util.FetchWeatherTask;
@@ -42,7 +41,6 @@ public class LoadingScreen extends AppCompatActivity implements FetchWeatherTask
         cityName.commit();
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            Toast.makeText(this, "Sorry mate...", Toast.LENGTH_SHORT).show();
             if (isNetworkAvailable()) {
                 new FetchWeatherTask(this).execute(preferences.getString("CityName", null));
             } else {

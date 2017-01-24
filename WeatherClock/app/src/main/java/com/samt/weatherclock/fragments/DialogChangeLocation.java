@@ -33,7 +33,7 @@ public class DialogChangeLocation extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        builder.setView(inflater.inflate(R.layout.main_activity_dialog_change_location,null))
+        builder.setView(inflater.inflate(R.layout.main_activity_dialog_change_location, null))
                 .setTitle("Input your location")
                 .setPositiveButton("Commit", new DialogInterface.OnClickListener() {
                     @Override
