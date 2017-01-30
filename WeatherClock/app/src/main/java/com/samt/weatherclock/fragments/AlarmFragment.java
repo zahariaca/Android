@@ -98,7 +98,6 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
                 if (pendingIntents.containsKey(uniqueId)) {
                     alarmManager.cancel(pendingIntents.get(uniqueId));
                     pendingIntents.remove(uniqueId);
-                    getActivity().sendBroadcast(myIntent);
                     Log.d(LOG_TAG, "Alarm canceled in alarmManager");
                 }
 
@@ -172,10 +171,12 @@ public class AlarmFragment extends Fragment implements DialogAdd.OnCompleteListe
 
         // we create a HashMap to store all of our pending intents
         // this is needed to be able to actually cancel alarms when swiping
+        Log.d(LOG_TAG, "ID value before setting pending intent : " + testId);
         pendingIntents.put(id, PendingIntent.getBroadcast(getActivity(), testId, myIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         Log.d(LOG_TAG, "Finished creating intent and pending intent for the alarms");
 
         //set the alarm manager
+        Log.d(LOG_TAG,"Calendar time to be set : " + calendar.getTime() );
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntents.get(id));
         Log.d(LOG_TAG, "Set the AlarmManager");
 

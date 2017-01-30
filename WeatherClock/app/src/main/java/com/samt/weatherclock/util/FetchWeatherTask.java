@@ -17,20 +17,20 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,String>>{
+public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String, String>> {
     public interface LoadingTaskFinishedListener {
-        void onTaskFinished(HashMap<String,String> weatherHashMap); // If you want to pass something back to the listener add a param to this method
+        void onTaskFinished(HashMap<String, String> weatherHashMap); // If you want to pass something back to the listener add a param to this method
     }
 
     public final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-    private final LoadingTaskFinishedListener finishedListener ;
+    private final LoadingTaskFinishedListener finishedListener;
 
-    public FetchWeatherTask(){
+    public FetchWeatherTask() {
 
         finishedListener = null;
     }
 
-    public FetchWeatherTask(LoadingTaskFinishedListener finishedListener){
+    public FetchWeatherTask(LoadingTaskFinishedListener finishedListener) {
         this.finishedListener = finishedListener;
     }
 
@@ -77,7 +77,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
 
 
         DateFormat df = DateFormat.getDateTimeInstance();
-        String updatedOn = df.format(new Date(forecastJson.getLong("dt")*1000));
+        String updatedOn = df.format(new Date(forecastJson.getLong("dt") * 1000));
 
         hashMap.put("CityName", cityName + ", " + country);
         hashMap.put("Updated", "Last update: " + updatedOn);
@@ -108,7 +108,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
         String key = "aeefe119edb695e78e33dd7eb70ef6d2";
 
 
-
         try {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
@@ -123,7 +122,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
             final String KEY_PARAM = "APPID";
             URL url = null;
 
-            if(params.length == 2) {
+            if (params.length == 2) {
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                         .appendQueryParameter(QUERY_PARAM1, params[0])
                         .appendQueryParameter(QUERY_PARAM2, params[1])
@@ -135,7 +134,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, HashMap<String,Str
 
                 Log.d(LOG_TAG, builtUri.toString());
                 url = new URL(builtUri.toString());
-            } else if (params.length == 1){
+            } else if (params.length == 1) {
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                         .appendQueryParameter(QUERY_PARAM, params[0])
                         .appendQueryParameter(FORMAT_PARAM, format)
