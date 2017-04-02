@@ -1,2 +1,2 @@
 # Android
-Android Test
+Android training repo, exercises & small applications
