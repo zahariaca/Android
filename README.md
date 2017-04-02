@@ -1,2 +1,2 @@
 # Android
-Android training repo, exercises & small applications
+Android training repo, exercises & small applications.
